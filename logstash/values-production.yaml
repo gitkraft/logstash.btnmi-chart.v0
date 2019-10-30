@@ -41,9 +41,15 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Logstash configuration file name. It must match the name of the configuration file mounted as a configmap
+##
 configFileName: logstash.conf
+## Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain
+##
 enableMonitoringAPI: true
-monitoringAPIPort: 9090
+## Logstash Monitoring API Port
+##
+monitoringAPIPort: 9600
 
 ## An array to add extra environment variables
 ## For example:
@@ -107,7 +113,7 @@ containerPorts:
     containerPort: 8080
     protocol: TCP
   - name: monitoring
-    containerPort: 9090
+    containerPort: 9600
     protocol: TCP
 
 ## Number of Logstash replicas to deploy
@@ -244,7 +250,7 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
+  annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
   ## The list of hostnames to be covered with this ingress record.
@@ -309,6 +315,30 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
 
   ## Logstash Prometheus Exporter containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
