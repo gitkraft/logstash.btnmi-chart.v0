@@ -15,6 +15,11 @@ This chart bootstraps a [logstash](https://github.com/bitnami/bitnami-docker-log
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
@@ -42,8 +47,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Logstash chart and their default values.
 
-| Parameter                                  | Description                                                                                                          | Default                                                 |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|                 Parameter                  |                                                     Description                                                      |                         Default                         |
+|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                     | Global Docker image registry                                                                                         | `nil`                                                   |
 | `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                      | Global storage class for dynamic provisioning                                                                        | `nil`                                                   |
@@ -58,7 +63,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `clusterDomain`                            | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                         |
 | `configFileName`                           | Logstash configuration file name. It must match the name of the configuration file mounted as a configmap.           | `logstash.conf`                                         |
 | `enableMonitoringAPI`                      | Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain                                      | `true`                                                  |
-| `monitoringAPIPort`                        | Logstash Monitoring API Port                                                                                         | `9090`                                                  |
+| `monitoringAPIPort`                        | Logstash Monitoring API Port                                                                                         | `9600`                                                  |
 | `extraEnvVars`                             | Array containing extra env vars to configure Logstash                                                                | `nil`                                                   |
 | `input`                                    | Input Plugins configuration                                                                                          | `Check values.yaml file`                                |
 | `filter`                                   | Filter Plugins configuration                                                                                         | `nil`                                                   |
@@ -88,7 +93,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
 | `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
-| `ingress.annotations`                      | Ingress annotations                                                                                                  | `[]`                                                    |
+| `ingress.annotations`                      | Ingress annotations                                                                                                  | `{}`                                                    |
 | `ingress.hosts[0].name`                    | Hostname for Logstash service                                                                                        | `logstash.local`                                        |
 | `ingress.hosts[0].path`                    | Path within the url structure                                                                                        | `/`                                                     |
 | `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                                            | `logstash.local`                                        |
@@ -113,6 +118,11 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
 | `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
 | `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)               | `false`                                                 |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                             | `nil`                                                   |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                         | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                              | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                  | `nil`                                                   |
 | `podDisruptionBudget.create`               | If true, create a pod disruption budget for pods.                                                                    | `false`                                                 |
 | `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                     | `1`                                                     |
 | `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                     | `nil`                                                   |
